@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>happyjdbc</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 
 	<name>happyjdbc</name>
 	<url>https://github.com/yuancihang/happyjdbc</url>
