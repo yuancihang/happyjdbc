@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import io.happyjdbc.share.DbShare;
+
 public abstract class Op<T> implements OpResult<T>{
 
 	protected String dbInstance;
@@ -40,7 +42,11 @@ public abstract class Op<T> implements OpResult<T>{
 	}
 	
 	protected String getTargetSql(){
-		return rawSql;
+		if(shareParam == null){
+			return rawSql;
+		}
+		
+		return DbShare.getInstance().getTargetSql(rawSql, shareParam);
 	}
 	
 	@Override

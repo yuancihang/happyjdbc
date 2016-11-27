@@ -7,12 +7,14 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import io.happyjdbc.share.DbShare;
+
 public class DataExample {
 
 	public static void main(String[] args) throws SQLException {
 		DataAccess.getInstance().addDataSource("local", buildDataSource());
 		
-		sampleTransaction();
+		sampleShare();
 	}
 	
 	private static DataSource buildDataSource() throws SQLException{
@@ -27,17 +29,17 @@ public class DataExample {
 	
 	public static void sampleUniq() throws SQLException{
 		int result = DataAccess.getInstance()
-							.execute(new OpUniq<Integer>("local", "select c2 from t1 where c1=?", 0, 1){})
+							.execute(new OpUniq<Integer>("local", "select c2 from t1 where c1=?", null, 1){})
 							.uniqResult();
 		System.err.println(result);
 		
 		T1 t1 = DataAccess.getInstance()
-							.execute(new OpUniq<T1>("local", "select * from t1 where c1=?", 0, 1){})
+							.execute(new OpUniq<T1>("local", "select * from t1 where c1=?", null, 1){})
 							.uniqResult();
 		System.err.println(t1);
 		
 		Map<String, Object> map = DataAccess.getInstance()
-									.execute(new OpUniq<Map<String, Object>>("local", "select * from t1 where c1=?", 0, 1){})
+									.execute(new OpUniq<Map<String, Object>>("local", "select * from t1 where c1=?", null, 1){})
 									.uniqResult();
 		for(String name : map.keySet()){
 			System.err.println(name + "=" + map.get(name));
@@ -46,24 +48,24 @@ public class DataExample {
 	
 	public static void sampleList() throws SQLException{
 		List<Integer> result = DataAccess.getInstance()
-				.execute(new OpList<Integer>("local", "select c2 from t1", 0){})
+				.execute(new OpList<Integer>("local", "select c2 from t1", null){})
 				.listResult();
 		System.err.println(result);
 		
 		List<T1> t1 = DataAccess.getInstance()
-				.execute(new OpList<T1>("local", "select * from t1", 0){})
+				.execute(new OpList<T1>("local", "select * from t1", null){})
 				.listResult();
 		System.err.println(t1);
 	}
 	
 	public static void sampleUpdate() throws SQLException{
 		int result = DataAccess.getInstance()
-						.execute(new OpUpdate("local", "update t1 set c2=? where c1=?", 0, 3, 1))
+						.execute(new OpUpdate("local", "update t1 set c2=? where c1=?", null, 3, 1))
 						.uniqResult();
 		System.err.println(result);
 		
 		long id = DataAccess.getInstance()
-						.execute(new OpInsertReturnId("local", "insert into t1(c2,c3) value(?,?)", 0, 10, 10))
+						.execute(new OpInsertReturnId("local", "insert into t1(c2,c3) value(?,?)", null, 10, 10))
 						.uniqResult();
 		System.err.println(id);
 	}
@@ -71,12 +73,23 @@ public class DataExample {
 	public static void sampleTransaction() throws SQLException{
 		// dbInstance必须一致
 		List<OpResult<?>> resultList = DataAccess.getInstance().executeTransaction(Arrays.asList(
-											new OpUpdate("local", "update t1 set c2=? where c1=?", 0, 4, 1),
-											new OpUpdate("local", "update t1 set c2=? where c1=?", 0, 6, 3)
+											new OpUpdate("local", "update t1 set c2=? where c1=?", null, 4, 1),
+											new OpUpdate("local", "update t1 set c2=? where c1=?", null, 6, 3)
 											));
 		for(OpResult<?> opResult : resultList){
 			System.err.println(opResult.uniqResult());
 		}
+	}
+	
+	public static void sampleShare() throws SQLException{
+		// table : user_0 ~ user_31
+		// field: id, name
+		DbShare.getInstance().addRule("user", "'user_'+(shareParam % 32)");
+		
+		int result = DataAccess.getInstance()
+							.execute(new OpUpdate("local", "update user set name=? where id=?", 32, "zhang", 32))
+							.uniqResult();
+		System.err.println(result);
 	}
 	
 	public static class T1{
