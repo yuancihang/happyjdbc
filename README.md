@@ -83,6 +83,14 @@
                   .uniqResult();
         System.err.println(result);
       }
+      
+      public static void sampleBatch() throws SQLException{
+		int[] result = DataAccess.getInstance().executeBatch("local", Arrays.asList(
+								"insert into t1(c2,c3) value(1,2)", 
+								"insert into t1(c2,c3) value(3,4)"
+								));
+		System.err.println(Arrays.toString(result));
+	}
 
       public static class T1{
         private long c1;
