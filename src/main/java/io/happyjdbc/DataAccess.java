@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class DataAccess {
 		}
 	}
 	
-	public static void close(PreparedStatement stat){
+	public static void close(Statement stat){
 		try {
 			if(stat != null){
 				stat.close();
@@ -164,6 +165,39 @@ public class DataAccess {
 			
 			close(rs);
 			close(ps);
+			close(conn);
+		}
+	}
+	
+	public int[] executeBatch(String dbInstance, List<String> sqlBatch) throws SQLException{
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try{
+			conn = getConnection(dbInstance);
+			conn.setAutoCommit(false);
+			stmt = conn.createStatement(); 
+			
+			for(String sql : sqlBatch){
+				stmt.addBatch(sql);
+			}
+			
+			int[] count = stmt.executeBatch();
+			conn.commit();
+			
+			return count;
+		} catch (Exception e) {
+			if(conn != null){
+				conn.rollback();
+			}
+			
+			throw new RuntimeException(e.getMessage(), e);
+		}finally{
+			if(conn != null){
+				conn.setAutoCommit(true);
+			}
+			
+			close(stmt);
 			close(conn);
 		}
 	}

@@ -14,13 +14,13 @@ public class DataExample {
 	public static void main(String[] args) throws SQLException {
 		DataAccess.getInstance().addDataSource("local", buildDataSource());
 		
-		sampleShare();
+		sampleBatch();
 	}
 	
 	private static DataSource buildDataSource() throws SQLException{
 		return new DataSourceBuilder()
 						.setDbName("my")
-						.setHost("localhost")
+						.setHost("10.130.130.249")
 						.setPort(3306)
 						.setUsername("root")
 						.setPassword("123456")
@@ -90,6 +90,14 @@ public class DataExample {
 							.execute(new OpUpdate("local", "update user set name=? where id=?", 32, "zhang", 32))
 							.uniqResult();
 		System.err.println(result);
+	}
+	
+	public static void sampleBatch() throws SQLException{
+		int[] result = DataAccess.getInstance().executeBatch("local", Arrays.asList(
+								"insert into t1(c2,c3) value(1,2)", 
+								"insert into t1(c2,c3) value(3,4)"
+								));
+		System.err.println(Arrays.toString(result));
 	}
 	
 	public static class T1{
