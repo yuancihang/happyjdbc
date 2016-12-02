@@ -124,3 +124,13 @@
       }
 
     }
+
+## maven
+	<dependency>
+	    <groupId>com.github.yuancihang</groupId>
+	    <artifactId>happyjdbc</artifactId>
+	    <version>1.2</version>
+	</dependency>
+	
+## gradle
+	compile 'com.github.yuancihang:happyjdbc:1.2'
