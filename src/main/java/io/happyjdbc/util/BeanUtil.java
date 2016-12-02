@@ -57,8 +57,8 @@ public class BeanUtil {
 	
 	/**
 	 * 获取实际的泛型类型
-	 * @param obj
-	 * @return
+	 * @param obj 对象
+	 * @return 实际参数类型
 	 */
 	public static Type[] getActualTypeArguments(Object obj){
 		Type type = obj.getClass().getGenericSuperclass();

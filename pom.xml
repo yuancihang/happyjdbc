@@ -2,11 +2,30 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.github.yuancihang</groupId>
 	<artifactId>happyjdbc</artifactId>
 	<version>1.2</version>
 
 	<name>happyjdbc</name>
+	<description>简化jdbc操作，提供更现代化的api, 支持分库分表</description>
 	<url>https://github.com/yuancihang/happyjdbc</url>
+	<licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>yuancihang</name>
+            <email>yuancihang@aliyun.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/yuancihang/happyjdbc.git</connection>
+        <developerConnection>scm:git:https://github.com/yuancihang/happyjdbc.git</developerConnection>
+        <url>https://github.com/yuancihang/happyjdbc.git</url>
+    </scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,5 +64,69 @@
                      			
 		</plugins>
 	</build>
-	<groupId>com.github.yuancihang</groupId>
+	<profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+            	<!--
+                <repository>
+		            <id>snapshot-oss</id>
+		            <name>snapshot-oss</name>
+		            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		        </repository>
+		    -->
+		        <repository>
+		            <id>release-oss</id>
+		            <name>release-oss</name>
+		            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		        </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>

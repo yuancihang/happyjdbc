@@ -8,7 +8,7 @@ import javax.script.ScriptException;
 
 /**
  * 嵌入脚本引擎
- * @author yuan<cihang.yuan@happyelements.com>
+ * @author <a href="mailto:cihang.yuan@happyelements.com">cihang.yuan@happyelements.com</a>
  *
  */
 public class Script {
@@ -26,9 +26,9 @@ public class Script {
 	
 	/**
 	 * 调用脚本中的函数, 和bindObject互斥
-	 * @param functionName String
-	 * @param args Object[]
-	 * @return Object
+	 * @param functionName String 函数名
+	 * @param args Object[] 参数
+	 * @return Object 返回值
 	 */
 	public Object invokeFunction(String functionName, Object... args)throws ScriptException, NoSuchMethodException{
 		Invocable invocable = (Invocable)scriptEngine; 
