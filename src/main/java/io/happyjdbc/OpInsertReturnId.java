@@ -1,6 +1,5 @@
 package io.happyjdbc;
 
-import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,8 +30,8 @@ public class OpInsertReturnId extends Op<Long> {
 			ResultSet rs = (ResultSet)r;
 			if(rs.next()){
 				Object tmp = rs.getObject(1);
-				if(tmp instanceof BigInteger){
-					result = ((BigInteger)tmp).longValue();
+				if(tmp instanceof Number){
+					result = ((Number)tmp).longValue();
 				}else{
 					result = (long)tmp;
 				}

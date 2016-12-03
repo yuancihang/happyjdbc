@@ -32,21 +32,31 @@ public abstract class OpList<T> extends Op<T> {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	public OpList(Class<T> modelClass, String dbInstance, String rawSql, Object shareParam, Object...params) {
+		super(dbInstance, rawSql, shareParam, params);
+		
+		this.modelClass = modelClass;
+	}
+	
 	@Override
 	protected void parseResultSet(ResultSet rs) throws SQLException{
 		if(rs.getMetaData().getColumnCount() > 1){
 			try {
-				if(Map.class.isAssignableFrom(modelClass)){
-					result.add((T)parseMap(rs));
-				}else{
-					result.add(BeanUtil.fillModel(rs, modelClass));
-				}
+				result.add(parseModel(rs));
 			} catch (Throwable e) {
 				throw new RuntimeException(e.getMessage(), e);
 			}
 		}else{
 			result.add(modelClass.cast(rs.getObject(1)));
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected T parseModel(ResultSet rs) throws Throwable{
+		if(Map.class.isAssignableFrom(modelClass)){
+			return ((T)parseMap(rs));
+		}else{
+			return BeanUtil.fillModel(rs, modelClass);
 		}
 	}
 	

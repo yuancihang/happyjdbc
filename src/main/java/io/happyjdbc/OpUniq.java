@@ -9,6 +9,10 @@ public abstract class OpUniq<T> extends OpList<T> {
 		super(dbInstance, rawSql, shareParam, params);
 	}
 	
+	public OpUniq(Class<T> modelClass, String dbInstance, String rawSql, Object shareParam, Object...params) {
+		super(modelClass, dbInstance, rawSql, shareParam, params);
+	}
+	
 	@Override
 	public T uniqResult(){
 		if(result.isEmpty()){

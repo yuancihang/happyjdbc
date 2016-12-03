@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import io.happyjdbc.dao.BaseTableDao;
 import io.happyjdbc.share.DbShare;
 
 public class DataExample {
@@ -14,7 +15,7 @@ public class DataExample {
 	public static void main(String[] args) throws SQLException {
 		DataAccess.getInstance().addDataSource("local", buildDataSource());
 		
-		sampleBatch();
+		sampleTableDao();
 	}
 	
 	private static DataSource buildDataSource() throws SQLException{
@@ -100,6 +101,12 @@ public class DataExample {
 		System.err.println(Arrays.toString(result));
 	}
 	
+	public static void sampleTableDao() throws SQLException{
+		T1Dao dao = new T1Dao();
+		
+		System.out.println(dao.queryModelList("select * from t1", null));
+	}
+	
 	public static class T1{
 		private long c1;
 		private int c2;
@@ -127,6 +134,14 @@ public class DataExample {
 		@Override
 		public String toString(){
 			return c1+","+c2+","+c3;
+		}
+		
+	}
+	
+	public static class T1Dao extends BaseTableDao<T1>{
+
+		public T1Dao() {
+			super("local", false);
 		}
 		
 	}

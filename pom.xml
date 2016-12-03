@@ -4,7 +4,7 @@
 
 	<groupId>com.github.yuancihang</groupId>
 	<artifactId>happyjdbc</artifactId>
-	<version>1.2</version>
+	<version>1.3</version>
 
 	<name>happyjdbc</name>
 	<description>简化jdbc操作，提供更现代化的api, 支持分库分表</description>
